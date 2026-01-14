@@ -1,4 +1,4 @@
-# AMD Strix Halo llama.cpp ROCm Toolbox
+# llama-rocm-toolbox
 
 A reproducible containerized setup for experimenting with [llama.cpp](https://github.com/ggml-org/llama.cpp) on AMD GPUs using ROCm, specifically targeting the Strix Halo (gfx1151).
 
@@ -22,7 +22,7 @@ This project automates the setup of a GPU-accelerated llama.cpp environment with
 ```bash
 # Clone repository
 git clone <repository-url>
-cd amd-strix-halo-llamacpp-toolbox
+cd llama-rocm-toolbox
 
 # Build container (default: Strix Halo)
 docker build -t llama-rocm .
