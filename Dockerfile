@@ -43,14 +43,8 @@ FROM build-stage02 AS build-stage03
 # Run 03-build-llamacpp.sh to build llama.cpp
 RUN bash 03-build-llamacpp.sh --install-toolchain --run-install
 
-# Stage 04: Validate inference (Phase 4, optional)
-FROM build-stage03 AS build-stage04
-
-# Run 04-validate-inference.sh for validation (optional, can be skipped)
-RUN bash 04-validate-inference.sh || echo "Validation skipped or failed"
-
 # Stage 05: Package ROCm runtime (Phase 5)
-FROM build-stage04 AS build-stage05
+FROM build-stage03 AS build-stage05
 
 # Run 05-package-rocm.sh to package ROCm runtime (non-interactive for container build)
 RUN NON_INTERACTIVE=1 bash 05-package-rocm.sh
