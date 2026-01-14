@@ -11,6 +11,9 @@ if [ -f "$(dirname "$0")/.toolbox.env" ]; then
   source "$(dirname "$0")/.toolbox.env"
 fi
 
+# Ensure defaults
+NON_INTERACTIVE=${NON_INTERACTIVE:-0}
+
 # Default BASE_IMAGE if not set in .toolbox.env
 BASE_IMAGE="${BASE_IMAGE:-docker.io/library/ubuntu:24.04}"
 

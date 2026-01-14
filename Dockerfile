@@ -8,14 +8,13 @@
 
 # Build arguments for configurable options
 ARG BASE_IMAGE=docker.io/library/ubuntu:24.04
-ARG ROCM_HOME=/opt/rocm
 ARG GPU_TARGET=gfx1151
 ARG BUILD_PLATFORM=linux
 
 # Stage 01: Provision base system (Phase 1 equivalent)
 FROM $BASE_IMAGE AS build-stage01
 
-ENV ROCM_HOME=${ROCM_HOME}
+ENV ROCM_HOME=/opt/rocm
 ENV GPU_TARGET=${GPU_TARGET}
 ENV BUILD_PLATFORM=${BUILD_PLATFORM}
 ENV NON_INTERACTIVE=1
@@ -36,9 +35,10 @@ RUN bash 01-prepare-env.sh
 # Stage 02: Install ROCm (Phase 2)
 FROM build-stage01 AS build-stage02
 
-ENV ROCM_HOME=${ROCM_HOME}
+ENV ROCM_HOME=/opt/rocm
 ENV GPU_TARGET=${GPU_TARGET}
 ENV BUILD_PLATFORM=${BUILD_PLATFORM}
+ENV WORKSPACE_DIR=/workspace
 ENV NON_INTERACTIVE=1
 
 # Run 02-install-rocm.sh to install ROCm
@@ -47,9 +47,11 @@ RUN bash 02-install-rocm.sh
 # Stage 03: Build llama.cpp (Phase 3)
 FROM build-stage02 AS build-stage03
 
-ENV ROCM_HOME=${ROCM_HOME}
+ENV ROCM_HOME=/opt/rocm
 ENV GPU_TARGET=${GPU_TARGET}
 ENV BUILD_PLATFORM=${BUILD_PLATFORM}
+ENV WORKSPACE_DIR=/workspace
+ENV LLAMA_HOME=/opt/llama
 ENV NON_INTERACTIVE=1
 
 # Run 03-build-llamacpp.sh to build and install llama.cpp
@@ -58,9 +60,11 @@ RUN bash 03-build-llamacpp.sh
 # Stage 05: Package ROCm runtime (Phase 5)
 FROM build-stage03 AS build-stage05
 
-ENV ROCM_HOME=${ROCM_HOME}
+ENV ROCM_HOME=/opt/rocm
 ENV GPU_TARGET=${GPU_TARGET}
 ENV BUILD_PLATFORM=${BUILD_PLATFORM}
+ENV WORKSPACE_DIR=/workspace
+ENV LLAMA_HOME=/opt/llama
 ENV NON_INTERACTIVE=1
 
 # Run 05-package-rocm.sh to package ROCm runtime (no archive to save space)
@@ -70,6 +74,7 @@ RUN bash 05-package-rocm.sh --no-archive
 FROM $BASE_IMAGE
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV NON_INTERACTIVE=1
 
 # Install runtime dependencies
 RUN apt-get update && \

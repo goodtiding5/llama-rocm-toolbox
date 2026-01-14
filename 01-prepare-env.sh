@@ -11,6 +11,9 @@ if [ -f "$(dirname "$0")/.toolbox.env" ]; then
   source "$(dirname "$0")/.toolbox.env"
 fi
 
+# Ensure defaults
+NON_INTERACTIVE=${NON_INTERACTIVE:-0}
+
 usage() {
   cat <<'USAGE'
 Usage: 01-prepare-toolbox.sh

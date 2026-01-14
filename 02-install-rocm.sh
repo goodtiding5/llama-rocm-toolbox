@@ -238,6 +238,7 @@ fi
 : "${BUILD_PLATFORM:=${BUILD_PLATFORM:-linux}}"
 : "${GPU_TARGET:=${GPU_TARGET:-gfx1151}}"
 : "${TOOLBOX_NAME:=${TOOLBOX_NAME:-llama-toolbox}}"
+NON_INTERACTIVE=${NON_INTERACTIVE:-0}
 
 # Basic tool checks
 for cmd in wget tar python3 curl; do

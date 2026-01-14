@@ -11,6 +11,9 @@ if [ -f "$(dirname "$0")/.toolbox.env" ]; then
   source "$(dirname "$0")/.toolbox.env"
 fi
 
+# Ensure defaults
+NON_INTERACTIVE=${NON_INTERACTIVE:-0}
+
 # Determine if sudo is needed
 if [ "$(id -u)" -eq 0 ]; then
   SUDO_CMD=""

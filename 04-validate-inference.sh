@@ -11,6 +11,9 @@ if [ -f "$(dirname "$0")/.toolbox.env" ]; then
   source "$(dirname "$0")/.toolbox.env"
 fi
 
+# Ensure defaults
+NON_INTERACTIVE=${NON_INTERACTIVE:-0}
+
 # Default environment variables for Docker/release layout
 ROCM_HOME="${ROCM_HOME:-/opt/rocm}"
 LLAMA_HOME="${LLAMA_HOME:-/opt/llama}"
