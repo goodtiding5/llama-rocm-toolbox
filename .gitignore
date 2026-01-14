@@ -1,0 +1,53 @@
+# Build artifacts
+build/
+*.o
+*.so
+*.a
+
+# Cache directories
+.cache/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ruff_cache/
+.ccache/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*.bak
+validation-output.txt
+tmp_hf_setup.sh
+
+# Snapshots and archives
+snapshots/
+*.tar.gz
+*.tar.xz
+
+# Runtime directories (local builds)
+.opt/
+/workspace/models/
+/workspace/llama.cpp/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Docker
+.dockerignore
+
+# Environment overrides
+.build.env.local
+.toolbox.env.local
+
+# Personal files
+personal/
+notes/
