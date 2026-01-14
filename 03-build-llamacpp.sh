@@ -22,7 +22,10 @@ EOF
 }
 
 # Source environment overrides if present
-if [ -f "$(dirname "$0")/.toolbox.env" ]; then
+if [ -f "$(dirname "$0")/.build.env" ]; then
+  # shellcheck disable=SC1090
+  source "$(dirname "$0")/.build.env"
+elif [ -f "$(dirname "$0")/.toolbox.env" ]; then
   # shellcheck disable=SC1090
   source "$(dirname "$0")/.toolbox.env"
 fi
