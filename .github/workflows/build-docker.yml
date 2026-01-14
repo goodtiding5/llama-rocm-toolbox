@@ -46,4 +46,4 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: goodtiding5/llama-rocm-ubuntu24.04:latest,goodtiding5/llama-rocm-ubuntu24.04:${{ env.TIMESTAMP }}
+        tags: openmtx/llama-rocm-ubuntu24.04:latest,openmtx/llama-rocm-ubuntu24.04:${{ env.TIMESTAMP }}
