@@ -15,7 +15,7 @@ FROM ubuntu:24.04
 
 # Create workspace and copy project files
 RUN mkdir -p /workspace
-COPY . /workspace/
+COPY .build.env tools/ 00-provision-toolbox.sh 01-install-basics.sh 02-install-rocm.sh 03-build-llamacpp.sh 04-validate-inference.sh 05-package-rocm.sh /workspace/
 
 # Override .build.env with build arguments
 RUN sed -i "s/GPU_TARGET=.*/GPU_TARGET=${GPU_TARGET}/" /workspace/.build.env && \
