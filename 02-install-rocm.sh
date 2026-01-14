@@ -85,7 +85,7 @@ handle_existing_installation() {
 
 # Download and extract the ROCm tarball
 download_and_extract() {
-  local downloads_dir offline_tarball tmpfile cleanup_temp
+  local downloads_dir offline_tarball tmpfile
 
   downloads_dir="${WORKSPACE_DIR:-/workspace}/downloads"
 
