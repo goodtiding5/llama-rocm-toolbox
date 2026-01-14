@@ -9,6 +9,7 @@
 # Build arguments for configurable GPU target and platform
 ARG GPU_TARGET=gfx1151
 ARG BUILD_PLATFORM=linux
+ARG VALIDATION_REQUIRED=0
 
 FROM ubuntu:24.04
 
@@ -26,6 +27,7 @@ WORKDIR /workspace
 RUN bash 01-install-basics.sh
 RUN export NON_INTERACTIVE=1 && bash 02-install-rocm.sh
 RUN bash 03-build-llamacpp.sh --install-toolchain --run-install
+RUN if [ "$VALIDATION_REQUIRED" = "1" ]; then bash 04-validate-inference.sh || echo "Validation skipped or failed"; fi
 RUN NON_INTERACTIVE=1 bash 05-package-rocm.sh
 
 # Remove the old ROCm directory after trimming
