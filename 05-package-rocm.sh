@@ -11,6 +11,13 @@ if [ -f "$(dirname "$0")/.build.env" ]; then
   source "$(dirname "$0")/.build.env"
 fi
 
+# Determine if ${SUDO} is needed
+if [ "$(id -u)" -eq 0 ]; then
+  SUDO=""
+else
+  SUDO="${SUDO}"
+fi
+
 ROCM_ROOT="${ROCM_HOME:-/opt/rocm}"
 RUNTIME_DIR="/opt/rocm.runtime"
 LLAMA_BIN="${LLAMA_BIN:-llama-simple}"
@@ -20,18 +27,18 @@ echo "[05] Trimming ROCm runtime from ${ROCM_ROOT} into ${RUNTIME_DIR}"
 
 # Archive existing profile scripts
 ARCHIVE_DIR="/workspace/archive"
-sudo mkdir -p "${ARCHIVE_DIR}"
+${SUDO} mkdir -p "${ARCHIVE_DIR}"
 if [ -f /etc/profile.d/rocm.sh ]; then
-  sudo cp /etc/profile.d/rocm.sh "${ARCHIVE_DIR}/"
+  ${SUDO} cp /etc/profile.d/rocm.sh "${ARCHIVE_DIR}/"
   echo "Archived /etc/profile.d/rocm.sh to ${ARCHIVE_DIR}"
 fi
 if [ -f /etc/profile.d/llama.sh ]; then
-  sudo cp /etc/profile.d/llama.sh "${ARCHIVE_DIR}/"
+  ${SUDO} cp /etc/profile.d/llama.sh "${ARCHIVE_DIR}/"
   echo "Archived /etc/profile.d/llama.sh to ${ARCHIVE_DIR}"
 fi
 
 # Create runtime directory
-sudo mkdir -p "${RUNTIME_DIR}/lib"
+${SUDO} mkdir -p "${RUNTIME_DIR}/lib"
 
 # Identify minimal runtime libraries by checking llama-simple dependencies
 echo "Analyzing dependencies of ${LLAMA_BIN}..."
@@ -52,43 +59,43 @@ fi
 echo "Copying ROCm libraries: $ROCMLIBS"
 for lib in $ROCMLIBS; do
   if [ -f "$lib" ]; then
-    sudo cp -v "$lib"* "${RUNTIME_DIR}/lib/" 2>/dev/null || true
+    ${SUDO} cp -v "$lib"* "${RUNTIME_DIR}/lib/" 2>/dev/null || true
   fi
 done
 
 # Also copy device libraries if present
 if [ -d "${ROCM_ROOT}/lib/llvm/amdgcn/bitcode" ]; then
-  sudo mkdir -p "${RUNTIME_DIR}/lib/llvm/amdgcn"
-  sudo cp -r "${ROCM_ROOT}/lib/llvm/amdgcn/bitcode" "${RUNTIME_DIR}/lib/llvm/amdgcn/"
+  ${SUDO} mkdir -p "${RUNTIME_DIR}/lib/llvm/amdgcn"
+  ${SUDO} cp -r "${ROCM_ROOT}/lib/llvm/amdgcn/bitcode" "${RUNTIME_DIR}/lib/llvm/amdgcn/"
 fi
 
 # Copy BLAS library folders for tuned kernels
 if [ -d "${ROCM_ROOT}/lib/rocblas/library" ]; then
-  sudo mkdir -p "${RUNTIME_DIR}/lib/rocblas"
-  sudo cp -r "${ROCM_ROOT}/lib/rocblas/library" "${RUNTIME_DIR}/lib/rocblas/"
+  ${SUDO} mkdir -p "${RUNTIME_DIR}/lib/rocblas"
+  ${SUDO} cp -r "${ROCM_ROOT}/lib/rocblas/library" "${RUNTIME_DIR}/lib/rocblas/"
   echo "Copied rocblas/library for tuned BLAS kernels"
 fi
 
 if [ -d "${ROCM_ROOT}/lib/hipblaslt/library" ]; then
-  sudo mkdir -p "${RUNTIME_DIR}/lib/hipblaslt"
-  sudo cp -r "${ROCM_ROOT}/lib/hipblaslt/library" "${RUNTIME_DIR}/lib/hipblaslt/"
+  ${SUDO} mkdir -p "${RUNTIME_DIR}/lib/hipblaslt"
+  ${SUDO} cp -r "${ROCM_ROOT}/lib/hipblaslt/library" "${RUNTIME_DIR}/lib/hipblaslt/"
   echo "Copied hipblaslt/library for tuned BLASLt kernels"
 fi
 
 # Copy hipconfig and rocminfo for verification
-sudo mkdir -p "${RUNTIME_DIR}/bin"
-sudo cp "${ROCM_ROOT}/bin/hipconfig" "${RUNTIME_DIR}/bin/" 2>/dev/null || true
-sudo cp "${ROCM_ROOT}/bin/rocminfo" "${RUNTIME_DIR}/bin/" 2>/dev/null || true
+${SUDO} mkdir -p "${RUNTIME_DIR}/bin"
+${SUDO} cp "${ROCM_ROOT}/bin/hipconfig" "${RUNTIME_DIR}/bin/" 2>/dev/null || true
+${SUDO} cp "${ROCM_ROOT}/bin/rocminfo" "${RUNTIME_DIR}/bin/" 2>/dev/null || true
 
 echo "[05] Runtime trimmed to ${RUNTIME_DIR}"
 
 # Create environment script for trimmed runtime
-sudo tee "${RUNTIME_DIR}/llama.sh" > /dev/null <<EOF
+${SUDO} tee "${RUNTIME_DIR}/llama.sh" > /dev/null <<EOF
 # Environment script for trimmed ROCm runtime
 export PATH="${RUNTIME_DIR}/bin:\$PATH"
 export LD_LIBRARY_PATH="${RUNTIME_DIR}/lib:\${LD_LIBRARY_PATH:-}"
 EOF
-sudo chmod +x "${RUNTIME_DIR}/llama.sh"
+${SUDO} chmod +x "${RUNTIME_DIR}/llama.sh"
 echo "Created environment script at ${RUNTIME_DIR}/llama.sh"
 
 # Test the trimmed runtime (skip in non-interactive mode)
