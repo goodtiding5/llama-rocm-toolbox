@@ -41,7 +41,7 @@ RUN export NON_INTERACTIVE=1 && bash 02-install-rocm.sh
 FROM build-stage02 AS build-stage03
 
 # Run 03-build-llamacpp.sh to build llama.cpp
-RUN bash 03-build-llamacpp.sh
+RUN bash 03-build-llamacpp.sh --install-toolchain
 
 # Stage 04: Validate inference (Phase 4, optional)
 FROM build-stage03 AS build-stage04
