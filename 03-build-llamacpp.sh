@@ -352,9 +352,11 @@ EOF
     fi
   fi
 
-  # Clean up build directory to save space
+  # Clean up build directory and source repo to save space
   echo "[03] Cleaning up build directory: $BUILD_DIR"
   rm -rf "$BUILD_DIR"
+  echo "[03] Cleaning up source repository: $TARGET_DIR"
+  rm -rf "$TARGET_DIR"
 
-  echo "[03] Commit recorded in: $TARGET_DIR/build-commit.txt"
+  echo "[03] Build complete, directories cleaned."
 fi
