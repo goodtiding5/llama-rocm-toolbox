@@ -28,7 +28,7 @@ cd amd-strix-halo-llamacpp-toolbox
 docker build -t llama-rocm .
 
 # Run with GPU access
-docker run -it --device /dev/kfd --device /dev/dri llama-rocm
+docker run -it --privileged --device /dev/kfd --device /dev/dri llama-rocm
 
 # Inside container, test inference
 source /opt/rocm/llama.sh
@@ -223,7 +223,11 @@ rocminfo
 
 ## ⚖️ License
 
-This project is provided as-is for educational and research purposes. See individual component licenses (ROCm, llama.cpp) for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+Note: This project builds upon other open-source components with their own licenses:
+- [llama.cpp](https://github.com/ggml-org/llama.cpp) (MIT)
+- [ROCm](https://rocm.docs.amd.com/) (Various licenses)
 
 ## 🙏 Acknowledgments
 
