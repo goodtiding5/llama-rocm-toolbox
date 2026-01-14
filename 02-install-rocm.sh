@@ -13,6 +13,10 @@ fi
 
 echo "Env sourced, ROCM_HOME=$ROCM_HOME"
 
+# Initialize variables
+tmpfile=""
+cleanup_temp=false
+
 # Determine if sudo is needed
 if [ "$(id -u)" -eq 0 ]; then
   SUDO_CMD=""
@@ -85,7 +89,7 @@ handle_existing_installation() {
 
 # Download and extract the ROCm tarball
 download_and_extract() {
-  local downloads_dir offline_tarball tmpfile
+  local downloads_dir offline_tarball
 
   downloads_dir="${WORKSPACE_DIR:-/workspace}/downloads"
 
