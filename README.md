@@ -37,8 +37,13 @@ llama-simple -m /path/to/model.gguf -n 32 "Hello world"
 
 ### Local Toolbox Development
 
+**Note**: Requires [distrobox](https://distrobox.it/) for GPU passthrough support.
+
 ```bash
-# Provision toolbox container
+# Inspect and customize .build.env if needed
+cat .build.env
+
+# Provision toolbox (uses TOOLBOX_NAME from .build.env, default: llama-toolbox)
 ./00-provision-toolbox.sh
 
 # Enter toolbox and run setup
