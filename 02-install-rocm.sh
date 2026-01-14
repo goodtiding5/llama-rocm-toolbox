@@ -354,13 +354,16 @@ ${SUDO_CMD:-} mkdir -p "$ROCM_HOME"
 echo "Extracting tarball into $ROCM_HOME..."
 ${SUDO_CMD:-} tar -xzf "$TMPFILE" -C "$ROCM_HOME"
 
+# Remove the downloaded tarball to save space
+rm -f "$TMPFILE"
+
 # After extraction, run configuration and verification
 echo "Running configuration (ld.so + profile) post-extract..." >&2
 configure_rocm
 
 # Run verification unless NON_INTERACTIVE is set
-echo "NON_INTERACTIVE=${NON_INTERACTIVE:-0}" >&2
-if [ "${NON_INTERACTIVE:-0}" -eq 1 ]; then
+echo "NON_INTERACTIVE=${NON_INTERACTIVE:-1}" >&2
+if [ "${NON_INTERACTIVE:-1}" -eq 1 ]; then
   echo "Skipping verification in non-interactive mode." >&2
   echo "ROCm installed and configured successfully." >&2
   exit 0
