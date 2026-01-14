@@ -74,7 +74,8 @@ COPY --from=build-stage05 /workspace /workspace
 RUN mkdir -p /workspace
 
 # Modify ubuntu user to llama
-RUN usermod -l llama ubuntu && \
+RUN groupmod -n llama ubuntu && \
+    usermod -l llama ubuntu && \
     usermod -d /workspace llama && \
     chown -R llama:llama /workspace && \
     chown -R llama:llama /opt/rocm && \
