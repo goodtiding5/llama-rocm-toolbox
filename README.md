@@ -1,6 +1,6 @@
 # AMD Strix Halo llama.cpp ROCm Toolbox
 
-A reproducible containerized setup for experimenting with [llama.cpp](https://github.com/ggerganov/llama.cpp) on AMD GPUs using ROCm, specifically targeting the Strix Halo (gfx1151).
+A reproducible containerized setup for experimenting with [llama.cpp](https://github.com/ggml-org/llama.cpp) on AMD GPUs using ROCm, specifically targeting the Strix Halo (gfx1151).
 
 ## 🎯 Overview
 
@@ -227,7 +227,7 @@ This project is provided as-is for educational and research purposes. See indivi
 
 ## 🙏 Acknowledgments
 
-- [llama.cpp](https://github.com/ggerganov/llama.cpp) by Georgi Gerganov
+- [llama.cpp](https://github.com/ggml-org/llama.cpp) by Georgi Gerganov
 - [ROCm](https://rocm.docs.amd.com/) by AMD
 - [distrobox](https://distrobox.it/) for container management
 
