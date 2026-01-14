@@ -11,17 +11,20 @@ if [ -f "$(dirname "$0")/.build.env" ]; then
   source "$(dirname "$0")/.build.env"
 fi
 
-# Determine if ${SUDO} is needed
+# Determine if sudo is needed
 if [ "$(id -u)" -eq 0 ]; then
   SUDO=""
 else
-  SUDO="${SUDO}"
+  SUDO="sudo"
 fi
 
 ROCM_ROOT="${ROCM_HOME:-/opt/rocm}"
 RUNTIME_DIR="/opt/rocm.runtime"
 LLAMA_BIN="${LLAMA_BIN:-llama-simple}"
 MODEL_PATH="${MODEL_PATH:-/workspace/models/unsloth_gemma-3-1b-it-GGUF_gemma-3-1b-it-UD-Q4_K_XL.gguf}"
+
+# Add llama install dir to PATH
+export PATH="${LLAMA_INSTALL_DIR:-/opt/llama}/bin:$PATH"
 
 echo "[05] Trimming ROCm runtime from ${ROCM_ROOT} into ${RUNTIME_DIR}"
 
