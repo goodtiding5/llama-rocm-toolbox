@@ -24,6 +24,20 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Free disk space
+      run: |
+        sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+        sudo docker image prune --all --force
+        sudo docker builder prune -a
+
+    - name: Check disk space
+      run: |
+        AVAILABLE=$(df / | tail -1 | awk '{print $4}')
+        if [ "$AVAILABLE" -lt 10000000 ]; then
+          echo "Not enough disk space after cleanup: $AVAILABLE KB available (need at least 10GB)"
+          exit 1
+        fi
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
