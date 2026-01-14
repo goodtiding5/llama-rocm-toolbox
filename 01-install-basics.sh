@@ -45,7 +45,7 @@ echo "[01] Preparing toolbox container"
 echo "Installing base dependencies..."
 apt-get update
 
-apt-get install -y --no-install-recommends ca-certificates wget curl python3 python3-pip git unzip gnupg xz-utils jq cmake ninja-build ccache
+apt-get install -y --no-install-recommends ca-certificates wget curl python3 python3-pip git unzip gnupg xz-utils jq cmake ninja-build ccache build-essential
 
 rm -rf /var/lib/apt/lists/*
 
