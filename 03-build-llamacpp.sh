@@ -352,5 +352,9 @@ EOF
     fi
   fi
 
+  # Clean up build directory to save space
+  echo "[03] Cleaning up build directory: $BUILD_DIR"
+  rm -rf "$BUILD_DIR"
+
   echo "[03] Commit recorded in: $TARGET_DIR/build-commit.txt"
 fi
