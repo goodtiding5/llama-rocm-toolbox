@@ -1,0 +1,43 @@
+services:
+  server:
+    image: llama-rocm:latest
+    build:
+      context: .
+    env_file:
+      - .docker.env
+    devices:
+      - "/dev/kfd:/dev/kfd"
+      - "/dev/dri:/dev/dri"
+    cap_add:
+      - IPC_LOCK
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    shm_size: "8gb"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '8.0'
+          memory: 32G
+        reservations:
+          cpus: '4.0'
+          memory: 16G
+    environment:
+      - HIP_VISIBLE_DEVICES=0
+      - OMP_NUM_THREADS=16
+      - GOMP_CPU_AFFINITY=0-15
+      - HF_HOME=/workspace/models
+    volumes:
+      - ./models:/workspace/models:rw
+    ports:
+      - "8080:8080"
+    working_dir: /workspace
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/v1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    command: >
+      llama-server --help

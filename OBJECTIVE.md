@@ -7,7 +7,7 @@ Scope
 - High-level goals: provision a reproducible toolbox container that exposes the host GPU, install and validate a ROCm-enabled `llama.cpp` build for the target GPU `gfx1151`, run an inference on a small GGUF model, and produce a deployable trimmed ROCm runtime.
 - Artifact sources: `https://github.com/ggml-org/llama.cpp.git` and the latest AMD ROCm nightly builds.
 - Outcomes, not implementation details: this document specifies what we want to accomplish; implementation steps are contained in `PLAN.md`.
-- Environment: scripts source a common `.toolbox.env` file for configurable defaults (see repository root). `.toolbox.env` includes `BASE_IMAGE` to configure the toolbox base image.
+- Environment: scripts source a common `.toolbox.env` file for toolbox configuration (see repository root). `.toolbox.env` includes `BASE_IMAGE` to configure the toolbox base image. It was renamed from `.build.env` to clarify its primary role in toolbox setup, analogous to ARG declarations used in Dockerfile/Podman builds. For Dockerfile builds, use ARGS declarations for configuration.
 - Note: The provisioning script `01-provision-toolbox.sh` supports a `-f|--force` flag to allow destructive recreation of an existing toolbox; by default it will not overwrite an existing toolbox.
 
 Milestones

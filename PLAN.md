@@ -7,7 +7,7 @@ Prerequisites
 - Host: Ubuntu 24.04 with a Strix Halo GPU and 128 GB RAM.
 - Access to the latest AMD ROCm nightly builds (network access required).
 - Permissions to create and run distrobox/toolbox containers with GPU passthrough.
-- Repository root includes `.toolbox.env` which is sourced by provisioning scripts for configurable defaults.
+- Repository root includes `.toolbox.env` for toolbox configuration, sourced by provisioning scripts. It was renamed from `.build.env` to clarify its primary role in toolbox setup, analogous to ARG declarations used in Dockerfile/Podman builds. For Dockerfile builds, use ARGS declarations for configuration.
 
 Phases & Steps
 
@@ -23,14 +23,14 @@ Phases & Steps
   - The provisioning script `01-provision-toolbox.sh` sources `.toolbox.env` and accepts an optional `-f|--force` flag to force recreation of an existing toolbox; by default it will refuse to overwrite an existing toolbox to prevent accidental destruction.
   - A short provisioning script or checklist.
 
-  Note: Add `LLAMA_INSTALL_DIR` to `.toolbox.env` to control where `llama.cpp` will be installed by `03-build-llamacpp.sh`. Example entry in `.toolbox.env`:
+  Note: Add `LLAMA_HOME` to `.toolbox.env` to control where `llama.cpp` will be installed by `03-build-llamacpp.sh`. Example entry in `.toolbox.env`:
 
   ```bash
   # Where `cmake --install` places built binaries/libraries. Use a path writable by the toolbox user or ensure sudo is available.
-  LLAMA_INSTALL_DIR=/opt/llama
+  LLAMA_HOME=/opt/llama
   ```
 
-  If you choose a system path (like `/opt/llama`) ensure the toolbox user has permission to write there or the script will use `sudo` during install. For per-user installs consider `LLAMA_INSTALL_DIR=$HOME/.local/llama`.
+  If you choose a system path (like `/opt/llama`) ensure the toolbox user has permission to write there or the script will use `sudo` during install. For per-user installs consider `LLAMA_HOME=$HOME/.local/llama`.
 
 2) ROCm installation
 - Install the latest ROCm nightly build from AMD within the toolbox.

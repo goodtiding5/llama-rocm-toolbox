@@ -28,8 +28,12 @@ snapshots/
 
 # Runtime directories (local builds)
 .opt/
-/workspace/models/
 /workspace/llama.cpp/
+.cache/
+models/*
+!models/.gitkeep
+downloads/*
+!.gitkeep
 
 # OS files
 .DS_Store
@@ -47,6 +51,7 @@ Thumbs.db
 # Environment overrides
 .build.env.local
 .toolbox.env.local
+.docker.env
 
 # Personal files
 personal/

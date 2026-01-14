@@ -6,9 +6,9 @@ set -euo pipefail
 # Usage: ./00-provision-toolbox.sh [container-name]
 
 # Source environment overrides if present
-if [ -f "$(dirname "$0")/.build.env" ]; then
+if [ -f "$(dirname "$0")/.toolbox.env" ]; then
   # shellcheck disable=SC1090
-  source "$(dirname "$0")/.build.env"
+  source "$(dirname "$0")/.toolbox.env"
 fi
 
 # Default BASE_IMAGE if not set in .toolbox.env
@@ -87,6 +87,12 @@ if [ "$container_exists" -eq 1 ]; then
 fi
 
 echo "Creating distrobox toolbox '${CONTAINER_NAME}' with GPU passthrough..."
-distrobox create --pull --image "${BASE_IMAGE}" --name "${CONTAINER_NAME}" --additional-flags "--privileged --device /dev/kfd --device /dev/dri"
+distrobox create --pull --image "${BASE_IMAGE}" --name "${CONTAINER_NAME}" \
+  --volume "$(pwd)/models:/workspace/models:rw" \
+  --volume "$(pwd)/downloads:/workspace/downloads:rw" \
+  --additional-flags "--privileged --device /dev/kfd --device /dev/dri"
+
+echo "Setting up workspace directory in toolbox..."
+distrobox enter "$CONTAINER_NAME" -- bash -lc 'if [ $(id -u) -ne 0 ]; then sudo mkdir -p /workspace; sudo chown -R $(id -u):$(id -g) /workspace; else mkdir -p /workspace; chown -R $(id -u):$(id -g) /workspace; fi'
 
 echo "[00] Provisioning complete."
